@@ -1,10 +1,6 @@
 
 package com.bit6.samples.demo;
 
-import java.io.File;
-
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -45,6 +41,10 @@ import com.bit6.sdk.OutgoingMessage;
 import com.bit6.sdk.ResultHandler;
 import com.bit6.sdk.RtcDialog;
 import com.bit6.sdk.db.Contract;
+
+import org.json.JSONObject;
+
+import java.io.File;
 
 public class ChatActivity extends Activity implements NotificationClient.Listener,
         MessageStatusListener {
@@ -359,6 +359,8 @@ public class ChatActivity extends Activity implements NotificationClient.Listene
     public void onMessageStatusChanged(Message m, int state) {
         if (state == Contract.Messages.STATUS_PREPARING) {
             Toast.makeText(ChatActivity.this, "prepare", Toast.LENGTH_LONG).show();
+        }else if(m == null && state == Contract.Messages.STATUS_FAILED){
+            Toast.makeText(ChatActivity.this, R.string.enable_gps, Toast.LENGTH_LONG).show();
         }
     }
 

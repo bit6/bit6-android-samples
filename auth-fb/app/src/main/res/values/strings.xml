@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Auth-fb</string>
+    <string name="fb_app_id"></string>
+    <string name="login">Login with Facebook account</string>
+    <string name="action_logout">logout</string>
+    <string name="is_calling">is calling</string>
+
+</resources>
