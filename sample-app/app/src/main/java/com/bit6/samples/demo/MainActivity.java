@@ -63,8 +63,6 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
         int env = getBit6Environment();
         spinner.setSelection(env == Bit6.PRODUCTION ? 0 : 1);
         spinner.setOnItemSelectedListener(this);
-
-        // CrashManager.register(this, App.HOCKEY_APP_TOKEN);
     }
 
     @Override

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.bit6.samples.authfb"
+    android:versionCode="9"
+    android:versionName="0.9.5">
+
+    <!-- Internet access - Allows applications to connect to the network -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Incoming call handling - Allows to keep the phone from sleeping or screen from dimming -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Incoming call handling - Access to the vibration effects -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- Voice/Video calling - Allows an application to record audio -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- Voice/Video calling - Allows an application to modify global audio settings -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <!-- Voice/Video calling, photo/video messages - To access camera services -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- Photo/Video messages - Allows an application to write to external storage. -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- Location messages - To access location services -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- More GCM push notifications -->
+    <permission
+        android:name="com.bit6.samples.authfb.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.bit6.samples.authfb.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/fb_app_id" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".LoginActivity" />
+        <activity android:name="com.facebook.FacebookActivity" />
+
+        <activity
+            android:name="com.bit6.sdk.ui.InCallActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"></activity>
+
+        <activity
+            android:name=".IncomingCallActivity"
+            android:launchMode="singleTop"></activity>
+
+        <!-- Bit6 Content Provider -->
+        <provider
+            android:name="com.bit6.sdk.db.Bit6ContentProvider"
+            android:authorities="com.bit6.samples.authfb"
+            android:exported="false" />
+
+        <!-- Bit6 receives GCM push notifications -->
+        <receiver
+            android:name="com.bit6.sdk.push.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.bit6.samples.authfb" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Bit6 handles GCM push notifications -->
+        <service android:name="com.bit6.sdk.push.PushIntentService" />
+
+        <!-- Your custom receiver for incoming calls -->
+        <receiver
+            android:name=".IncomingCallReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="com.bit6.samples.authfb.BIT6_INCOMING_CALL"></action>
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

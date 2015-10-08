@@ -1,14 +1,13 @@
 
 package com.bit6.samples.demo;
 
-import java.text.DateFormat;
-import java.util.Date;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.widget.CursorAdapter;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +18,11 @@ import android.widget.TextView;
 import com.bit6.samples.demo.imagecache.ImageFetcher;
 import com.bit6.sdk.Message;
 import com.bit6.sdk.db.Contract;
+
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 public class ChatAdapter extends CursorAdapter {
 
@@ -42,6 +46,7 @@ public class ChatAdapter extends CursorAdapter {
 
         ImageView thumb = (ImageView) view.findViewById(R.id.thumb);
         ImageView video = (ImageView) view.findViewById(R.id.video_icon);
+        thumb.setImageBitmap(null);
 
         thumb.setVisibility(View.GONE);
         video.setVisibility(View.GONE);
@@ -71,6 +76,11 @@ public class ChatAdapter extends CursorAdapter {
             // Additional data for the message - attachment, geo location etc
             String dataStr = cursor.getString(cursor.getColumnIndex(Contract.Messages.DATA));
             Message.Data data = Message.getData(dataStr, flags);
+            if(TextUtils.isEmpty(dataStr)){
+                thumb.setClickable(false);
+            }else{
+                thumb.setClickable(true);
+            }
             
             // Intent that will be used when this item is clicked
             Intent intent = null;
@@ -100,6 +110,17 @@ public class ChatAdapter extends CursorAdapter {
             if (intent != null) {
                 thumb.setOnClickListener(new OnThumbnailClickListener(intent));
             }
+        }else if(type == Contract.Messages.TYPE_CALL){
+            String callDataStr = cursor.getString(cursor.getColumnIndex(Contract.Messages.DATA));
+            try{
+                JSONObject callData = new JSONObject(callDataStr);
+                int secs = callData.optInt("duration");
+                content = calculateMins(secs, flags);
+                contentTv.setText(content);
+            }catch (Exception e){
+                Log.e("ChatAdapter", "" + e.getMessage());
+            }
+
         }
 
         // Show status
@@ -164,5 +185,40 @@ public class ChatAdapter extends CursorAdapter {
             mContext.startActivity(target);
         }
 
+    }
+
+    private String calculateMins(int secs, int flags){
+        String msg=null;
+        int status = Contract.Messages.getStatus(flags);
+        if(status == Contract.Messages.STATUS_CALL_MISSED){
+            msg = mContext.getString(R.string.missed_call);
+            return msg;
+        }
+        else if(status == Contract.Messages.STATUS_CALL_NOANSWER){
+            msg = mContext.getString(R.string.no_answer);
+            return msg;
+        }
+        if(secs ==0){
+            return null;
+        }
+
+        int mins = secs / 60;
+        secs = secs % 60;
+
+        if((flags & Contract.Messages.CHANNEL_VIDEO) == Contract.Messages.CHANNEL_VIDEO){
+            msg = mContext.getString(R.string.video_call);
+        }else{
+            msg = mContext.getString(R.string.voice_call);
+        }
+        String strMins=""+mins;
+        String strSecs =""+secs;
+        if(mins < 10){
+            strMins = "0"+mins;
+        }
+        if(secs < 10){
+            strSecs = "0"+secs;
+        }
+        msg = msg+" "+strMins+" : "+ strSecs;
+        return msg;
     }
 }
