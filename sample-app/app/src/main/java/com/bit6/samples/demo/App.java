@@ -2,38 +2,41 @@
 package com.bit6.samples.demo;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 
 import com.bit6.sdk.Bit6;
 import com.bit6.sdk.LifecycleHelper;
+import com.bit6.ui.IncomingMessageReceiver;
 
 public class App extends Application {
 
     final static String
-            PROD_API_KEY = "YOUR_API_KEY",
-            DEV_API_KEY = "YOUR_API_KEY";
+            PROD_API_KEY = "YOUR_API_KEY";
 
     final static String
             PREF_NAME = "env",
             PREF_ENV_ID = "envId";
-    
+
+    private MyContactSource contactSource;
+
     public void onCreate() {
         super.onCreate();
 
         Bit6 bit6 = Bit6.getInstance();
 
-        // Select the environment to connect to
-        // Usually you can just use constants but in this demo we allow
-        // switching environments (see MainActivity)
-        SharedPreferences pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-        int env = pref.getInt(PREF_ENV_ID, Bit6.PRODUCTION);
-        String apikey = env == Bit6.PRODUCTION ? PROD_API_KEY : DEV_API_KEY;
-
         // Initialize Bit6
-        bit6.init(getApplicationContext(), apikey, env);
+        bit6.init(getApplicationContext(), PROD_API_KEY, Bit6.PRODUCTION);
 
         // Manage Bit6 lifecycle automatically
         registerActivityLifecycleCallbacks(new LifecycleHelper(bit6));
+
+        // Create the app-specific ContactSource that will be used
+        // to render contact information in Bit6 UI components
+        contactSource = new MyContactSource();
+        contactSource.load(this);
+        IncomingMessageReceiver.setContactSource(contactSource);
     }
 
+    public MyContactSource getContactSource() {
+        return contactSource;
+    }
 }

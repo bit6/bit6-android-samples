@@ -4,7 +4,6 @@ package com.bit6.samples.authfb;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -25,7 +24,6 @@ public class IncomingCallActivity extends AppCompatActivity implements
     private ImageButton answer, reject;
     private Ringer ringer;
     private Bit6 bit6;
-    private String callerName;
     private TextView name;
     private boolean answered;
 
@@ -57,17 +55,14 @@ public class IncomingCallActivity extends AppCompatActivity implements
         dialog.addStateListener(this);
 
         TextView message = (TextView) findViewById(R.id.message);
-        message.setText(dialog.hasVideo() ? R.string.incoming_video_call
-                : R.string.incoming_voice_call);
+        message.setText(dialog.hasVideo() ? R.string.incoming_video_call : R.string.incoming_voice_call);
 
         String other = dialog.getOther();
 
-        callerName = dialog.getDisplayName();
 
-        if(TextUtils.isEmpty(callerName)){
-            callerName = other.toString().substring(
-                    other.toString().indexOf(":") + 1);
-        }
+        String callerName = other.toString().substring(
+                other.toString().indexOf(":") + 1);
+
 
         name = (TextView) findViewById(R.id.caller_name);
         name.setText(callerName);
@@ -116,7 +111,7 @@ public class IncomingCallActivity extends AppCompatActivity implements
 
     private void onAnswerClicked() {
         ringer.stop();
-        dialog.launchInCallActivity(this);
+        dialog.answer();
         finish();
     }
 

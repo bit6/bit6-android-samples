@@ -57,14 +57,20 @@
         <activity android:name="com.facebook.FacebookActivity" />
 
         <activity
-            android:name="com.bit6.sdk.ui.InCallActivity"
+            android:name=".CallActivity"
             android:configChanges="orientation|screenSize"
+            android:launchMode="singleTask"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"></activity>
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="com.bit6.samples.authfb.BIT6_CALL_ADDED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".IncomingCallActivity"
-            android:launchMode="singleTop"></activity>
+            android:launchMode="singleTop"/>
 
         <!-- Bit6 Content Provider -->
         <provider

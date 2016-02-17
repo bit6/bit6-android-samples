@@ -4,5 +4,7 @@
     <string name="login">Login with Facebook account</string>
     <string name="action_logout">logout</string>
     <string name="is_calling">is calling</string>
+    <string name="incoming_video_call">Incoming Video Call</string>
+    <string name="incoming_voice_call">Incoming Voice Call</string>
 
 </resources>

@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.bit6.sdk.Address;
 import com.bit6.sdk.Bit6;
-import com.bit6.sdk.RtcDialog;
 import com.bit6.sdk.SessionClient;
 import com.digits.sdk.android.Digits;
 
@@ -74,8 +73,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             phoneNumber = "+"+phoneNumber;
         }
         Address to = Address.fromParts(Address.KIND_PHONE, phoneNumber);
-        RtcDialog d = bit6.getCallClient().startCall(to, isVideo);
-        d.launchInCallActivity(this);
+        if(to != null){
+            bit6.getCallClient().startCall(to, isVideo);
+        }else{
+            Toast.makeText(this, R.string.error_number, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

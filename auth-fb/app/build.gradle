@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    compile "com.bit6.sdk:bit6-sdk:+"
+    compile "com.bit6.sdk:bit6-sdk:0.9.6"
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:recyclerview-v7:23.0.1'
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'

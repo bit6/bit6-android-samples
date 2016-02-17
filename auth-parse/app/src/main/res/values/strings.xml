@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">auth-parse</string>
+    <string name="action_settings">Logout</string>
+    <string name="username_hint">Parse user name</string>
+    <string name="password_hint">Parse password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="incorrect_credentials">Incorrect username/password</string>
+    <string name="video_call">Video Call</string>
+    <string name="voice_call">Voice Call</string>
+</resources>

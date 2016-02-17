@@ -25,32 +25,11 @@
             android:textColor="#FF3FADE5" />
     </LinearLayout>
 
-    <LinearLayout
+
+
+    <com.bit6.ui.ConversationList android:id="@+id/conversation_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal" >
-
-        <EditText
-            android:id="@+id/dest"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.7"
-            android:hint="Enter user name" />
-
-        <Button
-            android:id="@+id/compose"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3"
-            android:text="@string/compose" />
-    </LinearLayout>
-
-    <ListView
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom" >
-    </ListView>
+        android:layout_gravity="bottom"/>
 
 </LinearLayout>
