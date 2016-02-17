@@ -14,7 +14,7 @@ import io.fabric.sdk.android.Fabric;
 public class App extends Application {
 
     final static String
-            DEV_API_KEY = "YOUR_API_KEY",
+            API_KEY = "YOUR_API_KEY",
             DIGITS_CONSUMER_KEY = "YOUR_CONSUMER_KEY",
             DIGITS_CONSUMER_SECRET = "YOUR_CONSUMER_SECRET";
 
@@ -26,7 +26,7 @@ public class App extends Application {
 
         Bit6 bit6 = Bit6.getInstance();
         // Initialize Bit6
-        bit6.init(getApplicationContext(), DEV_API_KEY, Bit6.PRODUCTION);
+        bit6.init(getApplicationContext(), API_KEY, Bit6.PRODUCTION);
 
         // Manage Bit6 lifecycle automatically
         registerActivityLifecycleCallbacks(new LifecycleHelper(bit6));

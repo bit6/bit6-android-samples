@@ -1,6 +1,5 @@
 package com.bit6.samples.authfb;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.TextView;
 
 import com.bit6.sdk.Address;
 import com.bit6.sdk.Bit6;
-import com.bit6.sdk.RtcDialog;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,11 +17,9 @@ public class FriendsAdapter extends
         RecyclerView.Adapter<FriendsAdapter.ViewHolder>{
 
     private JSONArray friends;
-    private Context context;
 
-    FriendsAdapter(Context context, JSONArray users) {
+    FriendsAdapter(JSONArray users) {
         this.friends = users;
-        this.context = context;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -49,8 +45,8 @@ public class FriendsAdapter extends
         String name = user.optString("name");
         viewHolder.name.setText(name);
 
-        viewHolder.voiceCallButton.setOnClickListener(new OnItemClickListener(userId, false, name));
-        viewHolder.item.setOnClickListener(new OnItemClickListener(userId, true, name));
+        viewHolder.voiceCallButton.setOnClickListener(new OnItemClickListener(userId, false));
+        viewHolder.item.setOnClickListener(new OnItemClickListener(userId, true));
 
     }
 
@@ -84,21 +80,17 @@ public class FriendsAdapter extends
 
         private String userId;
         private boolean isVideo;
-        private String name;
 
-        public OnItemClickListener(String userId, boolean isVideo, String name) {
+        public OnItemClickListener(String userId, boolean isVideo) {
             this.userId = userId;
             this.isVideo = isVideo;
-            this.name = name;
         }
 
         @Override
         public void onClick(View v) {
             Bit6 bit6 = Bit6.getInstance();
             Address to = Address.fromParts("fb", userId);
-            RtcDialog d = bit6.getCallClient().startCall(to, isVideo);
-            d.setDisplayName(name);
-            d.launchInCallActivity(context);
+            bit6.getCallClient().startCall(to, isVideo);
         }
     }
 

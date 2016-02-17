@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setHasFixedSize(true);
 
-        adapter = new FriendsAdapter(MainActivity.this, friends);
+        adapter = new FriendsAdapter(friends);
         recyclerView.setAdapter(adapter);
     }
 

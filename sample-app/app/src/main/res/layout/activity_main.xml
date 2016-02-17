@@ -55,21 +55,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/sign_up" />
+
+
         </LinearLayout>
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/choose_env"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:text="Choose Environment " />
-
-    <Spinner
-        android:id="@+id/env_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

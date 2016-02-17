@@ -1,10 +1,7 @@
 <resources>
     <string name="app_name">Auth-digits</string>
-
-    <string name="hello_world">Hello world!</string>
     <string name="action_logout">Logout</string>
     <string name="video_call">Video Call</string>
     <string name="voice_call">Voice Call</string>
     <string name="error_number">Please provide valid phone number</string>
-    <string name="is_calling">is calling</string>
 </resources>

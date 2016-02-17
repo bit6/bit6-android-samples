@@ -3,11 +3,8 @@
     xmlns:amazon="http://schemas.amazon.com/apk/res/android"
     package="com.bit6.samples.demo"
     android:versionCode="9"
-    android:versionName="0.9.5" >
+    android:versionName="0.9.6">
 
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="23" />
 
     <!-- Internet access - Allows applications to connect to the network -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -44,18 +41,18 @@
 
     <!-- This app has permission to register and receive data message. -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    
+
     <!-- ADM Push Messaging -->
     <!-- This permission ensures that no other application can intercept your ADM messages. It
        should have the form packagename.permission.RECIEVE_ADM_MESSAGE where packagename is the
        name defined in the "package" property of the manifest tag. -->
     <permission
         android:name="com.bit6.samples.demo.permission.RECEIVE_ADM_MESSAGE"
-        android:protectionLevel="signature"/>
+        android:protectionLevel="signature" />
 
     <!-- Required permissions -->
-    <uses-permission android:name="com.bit6.samples.demo.permission.RECEIVE_ADM_MESSAGE"/>
-    <uses-permission android:name="com.amazon.device.messaging.permission.RECEIVE"/>
+    <uses-permission android:name="com.bit6.samples.demo.permission.RECEIVE_ADM_MESSAGE" />
+    <uses-permission android:name="com.amazon.device.messaging.permission.RECEIVE" />
 
 
     <application
@@ -63,7 +60,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
 
         <!-- Required for applications which use Google Play Services. -->
         <meta-data
@@ -81,50 +78,60 @@
         </activity>
         <activity
             android:name="com.bit6.samples.demo.ChatsActivity"
-            android:configChanges="orientation|screenSize" >
-        </activity>
+            android:configChanges="orientation|screenSize" />
         <activity
             android:name="com.bit6.samples.demo.ChatActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:launchMode="singleTop" >
+            android:exported="false"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.bit6.conversation" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
-            android:name="com.bit6.samples.demo.IncomingCallActivity"
-            android:launchMode="singleTop" >
+            android:name="com.bit6.ui.VideoRecorderActivity"
+            android:screenOrientation="portrait"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.bit6.ui.record_video"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
+        <activity
+            android:name="com.bit6.ui.IncomingCallActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity
             android:name="com.bit6.samples.demo.CallActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
-        </activity>
-        <activity
-            android:name="com.bit6.sdk.ui.InCallActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
-        </activity>
+            <intent-filter>
+                <action android:name="com.bit6.samples.demo.BIT6_CALL_ADDED"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            </activity>
+
 
         <provider
             android:name="com.bit6.sdk.db.Bit6ContentProvider"
             android:authorities="com.bit6.samples.demo.provider"
             android:exported="false" />
 
-        <receiver
-            android:name=".IncomingCallReceiver"
-            android:enabled="true" >
+        <receiver android:name="com.bit6.ui.IncomingCallReceiver" >
             <intent-filter>
-                <action android:name="com.bit6.samples.demo.BIT6_INCOMING_CALL" >
-                </action>
+                <action android:name="com.bit6.samples.demo.BIT6_INCOMING_CALL" />
             </intent-filter>
         </receiver>
+
         <receiver
-            android:name=".IncomingMessageReceiver"
-            android:enabled="true" >
+            android:name="com.bit6.ui.IncomingMessageReceiver"
+            android:enabled="true">
             <intent-filter>
-                <action android:name="com.bit6.samples.demo.BIT6_INCOMING_MESSAGE" >
-                </action>
+                <action android:name="com.bit6.samples.demo.BIT6_INCOMING_MESSAGE" />
             </intent-filter>
         </receiver>
 
@@ -133,27 +140,30 @@
         <!-- GCM push support -->
         <receiver
             android:name="com.bit6.sdk.push.GcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <category android:name="com.bit6.samples.demo" />
             </intent-filter>
         </receiver>
-        
+
         <!-- ADM push support -->
         <service
             android:name="com.bit6.sdk.push.AdmMessageHandler"
             android:exported="false" />
 
-        <amazon:enable-feature android:name="com.amazon.device.messaging"
+        <amazon:enable-feature
+            android:name="com.amazon.device.messaging"
             android:required="false" />
 
-        <receiver android:name="com.bit6.sdk.push.AdmMessageHandler$Receiver"
+        <receiver
+            android:name="com.bit6.sdk.push.AdmMessageHandler$Receiver"
             android:permission="com.amazon.device.messaging.permission.SEND">
             <intent-filter>
-               <action android:name="com.amazon.device.messaging.intent.REGISTRATION" />
-               <action android:name="com.amazon.device.messaging.intent.RECEIVE" />
-               <category android:name="com.bit6.samples.demo"/>
+                <action android:name="com.amazon.device.messaging.intent.REGISTRATION" />
+                <action android:name="com.amazon.device.messaging.intent.RECEIVE" />
+
+                <category android:name="com.bit6.samples.demo" />
             </intent-filter>
         </receiver>
 
