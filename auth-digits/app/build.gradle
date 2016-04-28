@@ -20,8 +20,7 @@ android {
 }
 
 dependencies {
-    compile "com.bit6.sdk:bit6-sdk:0.9.6"
-    compile "com.bit6.ui:bit6-ui:0.9.6"
+    compile "com.bit6.ui:bit6-ui:0.9.7"
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile('com.digits.sdk.android:digits:1.9.4@aar') {
         transitive = true;

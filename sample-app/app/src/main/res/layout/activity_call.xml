@@ -14,9 +14,8 @@
         android:id="@+id/add_person"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:background="@drawable/ic_action_add_person"
-        android:contentDescription="@string/hangup_call"
         android:layout_centerHorizontal="true"
-        android:visibility="gone"/>
+        android:background="@drawable/ic_action_add_person"
+        android:visibility="gone" />
 
 </RelativeLayout>

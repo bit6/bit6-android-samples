@@ -19,8 +19,5 @@ android {
 }
 
 dependencies {
-    compile 'com.bit6.sdk:bit6-sdk:0.9.6'
-    compile 'com.bit6.ui:bit6-ui:0.9.6'
-    compile 'com.android.support:support-v4:23.0.1'
-    compile 'com.google.android.gms:play-services:8.0.1'
+    compile 'com.bit6.ui:bit6-ui:0.9.7'
 }

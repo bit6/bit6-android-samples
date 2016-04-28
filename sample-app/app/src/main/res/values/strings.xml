@@ -2,35 +2,55 @@
 <resources>
 
     <string name="app_name">Bit6 Demo</string>
-    <string name="username_hint">User name</string>
-    <string name="password_hint">Password</string>
-    <string name="sign_in">Sign In</string>
-    <string name="sign_up">Sign Up</string>
-    <string name="logged_in">Logged in as %1$s</string>
-    <string name="logout"> Logout</string>
-    <string name="compose">Compose</string>
-    <string name="incorrect_credentials">Incorrect username/password</string>
-    <string name="choose_photo">Choose Photo</string>
-    <string name="take_photo">Take Photo</string>
-    <string name="record_video">Record Video</string>
-    <string name="share_location">Share Location</string>
-    <string name="menu_video_call">Video Call</string>
-    <string name="menu_voice_call">Voice Call</string>
-    <string name="menu_group_details">Group Details</string>
-    <string name="menu_group_delete">Delete Group</string>
-    <string name="answer">Answer</string>
-    <string name="reject">Reject</string>
-    <string name="user_is_calling">%1$s is calling</string>
-    <string name="menu_pstn_call">Call</string>
-    <string name="menu_add_person">Add Person</string>
-    <string name="menu_add_group">Add Group</string>
+
+    <!-- Common text strings -->
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    <string name="phone_number_hint">+1 (xxx) xxx-xxxx </string>
-    <string name="pstn_dialog_message">Enter number starting with +1 for a short test call</string>
-    <string name="pstn_dialog_title">Test Calls to US and Canada</string>
-    <string name="add_conversation_dialog_title">Add Conversation</string>
-    <string name="invalid_phone_number">Invalid Phone Number</string>
-    <string name="select_contact">Select Contact</string>
+    <string name="logout">Logout</string>
+    <string name="answer_call">Answer</string>
+    <string name="reject_call">Reject</string>
+
+    <!-- MainActivity -->
+    <string name="main_username_hint">User name</string>
+    <string name="main_password_hint">Password</string>
+    <string name="main_login">Login</string>
+    <string name="main_signup">Sign Up</string>
+
+    <!-- ChatActivity menu -->
+    <string name="chat_menu_video_call">Video Call</string>
+    <string name="chat_menu_voice_call">Voice Call</string>
+    <string name="chat_menu_group_details">Group Details</string>
+    <string name="chat_menu_group_delete">Delete Group</string>
+
+    <!-- ComposeView menu in ChatActivity -->
+    <string name="compose_choose_photo">Choose Photo</string>
+    <string name="compose_take_photo">Take Photo</string>
+    <string name="compose_record_video">Record Video</string>
+    <string name="compose_share_location">Share Location</string>
+
+    <!-- ChatsActivity -->
+    <string name="chats_menu_pstn_call">Phone Call</string>
+    <string name="chats_menu_direct_chat">Direct Chat</string>
+    <string name="chats_menu_create_group">Create Group</string>
+
+    <string name="pstn_dialog_phone_number_hint">+1 (xxx) xxx-xxxx </string>
+    <string name="pstn_dialog_message">Call a US or Canada phone</string>
+    <string name="pstn_dialog_title">Test Phone Call</string>
+
+    <string name="direct_chat_dialog_title">Direct Chat</string>
+    <string name="create_group_dialog_title">Create Group</string>
+
+    <!-- CallActivity - In-call UI -->
+    <string name="call_add_participant_dialog_title">Select Contact</string>
+
+    <!-- GroupActivity -->
+    <string name="group_menu_edit_title">Edit Title</string>
+    <string name="group_menu_delete_group">Delete Group</string>
+    <string name="group_invite_member_button">Invite Member</string>
+    <string name="group_invite_member_dialog_title">Invite Member</string>
+
+    <!-- Error messages -->
+    <string name="error_invalid_phone_number">Invalid phone number</string>
+    <string name="error_incorrect_credentials">Incorrect username/password</string>
 
 </resources>

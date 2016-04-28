@@ -16,7 +16,7 @@ import com.bit6.sdk.Address;
 import com.bit6.sdk.Bit6;
 import com.bit6.sdk.ResultHandler;
 
-public class MainActivity extends Activity implements OnClickListener{
+public class MainActivity extends Activity implements OnClickListener {
 
     static final String TAG = "Main";
 
@@ -97,7 +97,7 @@ public class MainActivity extends Activity implements OnClickListener{
 
         // Invalid username or password
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(pass)) {
-            Toast.makeText(this, getString(R.string.incorrect_credentials), Toast.LENGTH_LONG)
+            Toast.makeText(this, getString(R.string.error_incorrect_credentials), Toast.LENGTH_LONG)
                     .show();
             return;
         }

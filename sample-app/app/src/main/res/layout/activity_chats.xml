@@ -9,9 +9,10 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <com.bit6.ui.ConversationView
-        android:id="@+id/conversation"
-        android:layout_width="wrap_content"
+    <com.bit6.ui.ConversationList
+        android:id="@+id/conversation_list"
+        style="@style/ConversationListItemStyle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
 </LinearLayout>

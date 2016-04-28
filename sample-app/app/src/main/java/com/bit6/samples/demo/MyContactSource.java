@@ -14,7 +14,7 @@ import java.util.HashMap;
 /**
  * Super simple ContactSource implementation. It converts a username identity into a display name.
  * It also uses the existing conversations from Bit6 to preload the list. Values are cached.
- * */
+ */
 public class MyContactSource implements ContactSource {
 
     private HashMap<String, Contact> contacts = new HashMap<>();
@@ -22,8 +22,8 @@ public class MyContactSource implements ContactSource {
     // App-specific way to pre-populate the contacts list
     public void load(Context context) {
         Cursor cursor = context.getContentResolver().query(
-                Contract.Conversations.CONTENT_URI, new String[] {
-                    Contract.Conversations.ID
+                Contract.Conversations.CONTENT_URI, new String[]{
+                        Contract.Conversations.ID
                 }, null, null, null);
 
         int identityIndex = cursor.getColumnIndex(Contract.Conversations.ID);
@@ -51,7 +51,9 @@ public class MyContactSource implements ContactSource {
             String name = identity;
             int pos = identity.indexOf(':');
             if (pos > 0) {
-                name = identity.substring(pos+1);
+                name = identity.substring(pos + 1);
+                // Uppercase the first letter for a pretty display name
+                name = Character.toUpperCase(name.charAt(0)) + name.substring(1);
             }
             // Save it in cache
             contacts.put(identity, new MyContact(identity, name));
@@ -64,7 +66,7 @@ public class MyContactSource implements ContactSource {
         private String id, name;
 
         MyContact(String id, String name) {
-            this.id=id;
+            this.id = id;
             this.name = name;
         }
 

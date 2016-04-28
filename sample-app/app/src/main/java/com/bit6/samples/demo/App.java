@@ -12,10 +12,6 @@ public class App extends Application {
     final static String
             PROD_API_KEY = "YOUR_API_KEY";
 
-    final static String
-            PREF_NAME = "env",
-            PREF_ENV_ID = "envId";
-
     private MyContactSource contactSource;
 
     public void onCreate() {
@@ -24,7 +20,7 @@ public class App extends Application {
         Bit6 bit6 = Bit6.getInstance();
 
         // Initialize Bit6
-        bit6.init(getApplicationContext(), PROD_API_KEY, Bit6.PRODUCTION);
+        bit6.init(getApplicationContext(), PROD_API_KEY);
 
         // Manage Bit6 lifecycle automatically
         registerActivityLifecycleCallbacks(new LifecycleHelper(bit6));

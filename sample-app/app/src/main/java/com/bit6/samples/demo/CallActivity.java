@@ -1,7 +1,5 @@
-
 package com.bit6.samples.demo;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -10,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -17,6 +16,7 @@ import com.bit6.sdk.Address;
 import com.bit6.sdk.Bit6;
 import com.bit6.sdk.RtcDialog;
 import com.bit6.sdk.RtcDialog.StateListener;
+import com.bit6.sdk.ui.RtcMediaView;
 import com.bit6.ui.Contact;
 import com.bit6.ui.InCallView;
 import com.bit6.ui.IncomingCallReceiver;
@@ -25,7 +25,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class CallActivity extends Activity implements StateListener {
+public class CallActivity extends AppCompatActivity implements StateListener {
+
+    private static final int
+            REQ_PERMISSION_WEBRTC = 100;
 
     private Bit6 bit6;
     private MyContactSource cs;
@@ -50,12 +53,7 @@ public class CallActivity extends Activity implements StateListener {
 
         bit6 = Bit6.getInstance();
         // App-specific ContactSource
-        cs = ((App)getApplication()).getContactSource();
-
-        // InCallView UI
-        inCallView = (InCallView) findViewById(R.id.incall_view);
-        // Initiate inCallView before using it
-        inCallView.init(this, cs);
+        cs = ((App) getApplication()).getContactSource();
 
         // A button to add a new participant to the call
         addParticipantButton = (ImageButton) findViewById(R.id.add_person);
@@ -72,10 +70,45 @@ public class CallActivity extends Activity implements StateListener {
         // Register incoming call receiver
         registerReceiver(receiver, new IntentFilter(getPackageName() + Bit6.INCOMING_CALL_INTENT_SUFFIX));
 
+        // This is mostly for SDK 23
+        // Check if the user has granted sufficient permissions for WebRTC calling
+        // If not - they will be requested, and the response will be provided in
+        // onRequestPermissionsResult()
+        if (RtcMediaView.checkPermissions(this, REQ_PERMISSION_WEBRTC)) {
+            // Have all the permissions - initialize InCallView
+            initInCallView();
+        }
+    }
+
+    private void initInCallView() {
+        // InCallView UI
+        inCallView = (InCallView) findViewById(R.id.incall_view);
+        // Initiate inCallView before using it
+        inCallView.init(this, cs);
+
         // Get RtcDialog from intent and add it to the UI
         RtcDialog d = bit6.getCallClient().getDialogFromIntent(getIntent());
         addCall(d);
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQ_PERMISSION_WEBRTC) {
+            // Do we have sufficient permissions now?
+            // Note the second argument is '0' which means that
+            // the permissions will be checked only and not requested
+            if (RtcMediaView.checkPermissions(this, 0)) {
+                // Have all the permissions - initialize InCallView
+                initInCallView();
+            } else {
+                // Permissions were not granted - cannot proceed with calling
+                // Just close the InCall UI
+                finish();
+            }
+        }
+    }
+
 
     @Override
     public void onStateChanged(RtcDialog d, int state) {
@@ -110,14 +143,16 @@ public class CallActivity extends Activity implements StateListener {
     // Add a new call to the UI
     void addCall(RtcDialog d) {
         d.addStateListener(this);
-        inCallView.addCall(d);
+        if (inCallView != null) {
+            inCallView.addCall(d);
+        }
     }
 
     // Show a list of contacts that is used to add a participant to the call
     private void showAddParticipantDialog() {
 
         // Identities already participating in the call
-        HashMap<String,String> participants = new HashMap<>();
+        HashMap<String, String> participants = new HashMap<>();
         List<RtcDialog> calls = bit6.getCallClient().getRtcDialogs();
         for (RtcDialog c : calls) {
             String id = c.getOther();
@@ -138,14 +173,14 @@ public class CallActivity extends Activity implements StateListener {
 
         // Dialog list items
         CharSequence[] items = new CharSequence[contacts.size()];
-        for(int i=0, n=contacts.size(); i < n; i++) {
+        for (int i = 0, n = contacts.size(); i < n; i++) {
             items[i] = contacts.get(i).getDisplayName();
         }
 
         // Create AlertDialog of list of items
         // http://developer.android.com/guide/topics/ui/dialogs.html#AddingAList
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.select_contact)
+        builder.setTitle(R.string.call_add_participant_dialog_title)
                 .setCancelable(true)
                 .setItems(items, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int idx) {
@@ -172,19 +207,19 @@ public class CallActivity extends Activity implements StateListener {
         // Display name for the caller
         String displayName = c != null ? c.getDisplayName() : other;
 
-        String title = String.format(getString(com.bit6.ui.R.string.user_is_calling), displayName);
+        String title = String.format(getString(R.string.incoming_call_text), displayName);
 
         // Show IncomingCall dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title)
-                .setPositiveButton(R.string.answer, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.incoming_call_answer, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // Add to UI
                         addCall(d);
                     }
                 })
-                .setNegativeButton(R.string.reject, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.incoming_call_reject, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         d.hangup();
@@ -192,5 +227,13 @@ public class CallActivity extends Activity implements StateListener {
                 })
                 .create()
                 .show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (bit6 != null && bit6.getCallClient() != null) {
+            bit6.getCallClient().hangupAll();
+        }
+        super.onBackPressed();
     }
 }

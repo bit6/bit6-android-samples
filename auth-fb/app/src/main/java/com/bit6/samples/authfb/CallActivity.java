@@ -12,7 +12,7 @@ import com.bit6.sdk.RtcDialog;
 import com.bit6.sdk.ui.RtcMediaView;
 
 public class CallActivity extends Activity implements RtcDialog.StateListener {
-    RtcMediaView mediaView;
+    private RtcMediaView mediaView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_direct_chat"
+        android:icon="@drawable/ic_action_add_person"
+        android:title="@string/chats_menu_direct_chat"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_create_group"
+        android:icon="@drawable/ic_action_add_group"
+        android:title="@string/chats_menu_create_group"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/menu_pstn_call"
         android:icon="@drawable/ic_action_call"
-        android:showAsAction="always"
-        android:title="@string/menu_pstn_call"/>
+        android:title="@string/chats_menu_pstn_call"
+        app:showAsAction="never" />
 
     <item
-        android:id="@+id/menu_add_person"
-        android:icon="@drawable/ic_action_add_person"
-        android:showAsAction="always"
-        android:title="@string/menu_add_person"/>
-
-    <item
-        android:id="@+id/menu_add_group"
-        android:icon="@drawable/ic_action_add_group"
-        android:showAsAction="always"
-        android:title="@string/menu_add_group"/>
+        android:id="@+id/menu_logout"
+        android:title="@string/logout"
+        app:showAsAction="never" />
 
 </menu>

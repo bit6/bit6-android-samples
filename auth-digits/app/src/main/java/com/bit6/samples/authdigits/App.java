@@ -26,7 +26,7 @@ public class App extends Application {
 
         Bit6 bit6 = Bit6.getInstance();
         // Initialize Bit6
-        bit6.init(getApplicationContext(), API_KEY, Bit6.PRODUCTION);
+        bit6.init(getApplicationContext(), API_KEY);
 
         // Manage Bit6 lifecycle automatically
         registerActivityLifecycleCallbacks(new LifecycleHelper(bit6));
