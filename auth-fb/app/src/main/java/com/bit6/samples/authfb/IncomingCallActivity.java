@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.bit6.sdk.Bit6;
+import com.bit6.sdk.CallClient;
 import com.bit6.sdk.NotificationClient;
 import com.bit6.sdk.Ringer;
 import com.bit6.sdk.RtcDialog;
@@ -18,13 +19,13 @@ import com.bit6.sdk.RtcDialog;
 import org.json.JSONObject;
 
 public class IncomingCallActivity extends AppCompatActivity implements
-        RtcDialog.StateListener, OnClickListener, NotificationClient.Listener {
+        CallClient.StateListener, OnClickListener, NotificationClient.Listener {
 
     private RtcDialog dialog;
     private ImageButton answer, reject;
     private Ringer ringer;
     private Bit6 bit6;
-    private TextView name;
+    private CallClient callClient;
     private boolean answered;
 
     @Override
@@ -49,10 +50,9 @@ public class IncomingCallActivity extends AppCompatActivity implements
 
         ringer = new Ringer(this);
         bit6 = Bit6.getInstance();
-
-        dialog = bit6.getCallClient().getDialogFromIntent(getIntent());
-
-        dialog.addStateListener(this);
+        callClient = bit6.getCallClient();
+        callClient.addStateListener(this);
+        dialog = callClient.getDialogFromIntent(getIntent());
 
         TextView message = (TextView) findViewById(R.id.message);
         message.setText(dialog.hasVideo() ? R.string.incoming_video_call : R.string.incoming_voice_call);
@@ -60,11 +60,10 @@ public class IncomingCallActivity extends AppCompatActivity implements
         String other = dialog.getOther();
 
 
-        String callerName = other.toString().substring(
-                other.toString().indexOf(":") + 1);
+        String callerName = other.substring(other.indexOf(":") + 1);
 
 
-        name = (TextView) findViewById(R.id.caller_name);
+        TextView name = (TextView) findViewById(R.id.caller_name);
         name.setText(callerName);
 
 
@@ -89,7 +88,9 @@ public class IncomingCallActivity extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
-        dialog.removeStateListener(this);
+        if (callClient != null) {
+            callClient.removeStateListener(this);
+        }
         super.onDestroy();
     }
 
@@ -111,13 +112,13 @@ public class IncomingCallActivity extends AppCompatActivity implements
 
     private void onAnswerClicked() {
         ringer.stop();
-        dialog.answer();
+        dialog.answer(dialog.hasVideo());
         finish();
     }
 
     @Override
-    public void onStateChanged(RtcDialog d, int state) {
-        if (state == RtcDialog.END) {
+    public void onStateChanged(RtcDialog d) {
+        if (d.getState() == RtcDialog.END) {
             finish();
         }
     }

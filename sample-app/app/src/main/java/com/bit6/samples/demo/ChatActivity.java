@@ -17,6 +17,7 @@ import com.bit6.sdk.Address;
 import com.bit6.sdk.Bit6;
 import com.bit6.sdk.Group;
 import com.bit6.sdk.NotificationClient;
+import com.bit6.sdk.RtcDialog;
 import com.bit6.sdk.db.Contract;
 import com.bit6.sdk.util.Utils;
 import com.bit6.ui.ActionItem;
@@ -39,7 +40,9 @@ public class ChatActivity extends AppCompatActivity implements NotificationClien
     private boolean isGroupChat;
     private Toolbar toolbar;
     // App-specific ContactSource
-    ContactSource cs;
+    private ContactSource cs;
+    private Settings settings;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class ChatActivity extends AppCompatActivity implements NotificationClien
         composeView = conversationView.getComposeView();
         // Bit6 instance
         bit6 = Bit6.getInstance();
+        settings = new Settings(this);
         // Listen to 'typing' notifications
         bit6.getNotificationClient().addListener(this);
         cs = ((App) getApplication()).getContactSource();
@@ -273,7 +277,8 @@ public class ChatActivity extends AppCompatActivity implements NotificationClien
 
     // Start voice or video call
     private void startCall(boolean isVideo) {
-        bit6.getCallClient().startCall(other, isVideo);
+        String mediaMode = settings.getMediaMode() == Settings.MODE_P2P ? RtcDialog.MODE_P2P : RtcDialog.MODE_MIX;
+        bit6.getCallClient().startCall(other, isVideo, mediaMode);
     }
 
     private String getGroupTitleFromMembers(long _id) {
@@ -283,7 +288,11 @@ public class ChatActivity extends AppCompatActivity implements NotificationClien
         if (members != null && members.moveToFirst()) {
             while (!members.isAfterLast()) {
                 String memberId = members.getString(members.getColumnIndex(Contract.Members.ID));
-                String name = cs.get(memberId).getDisplayName();
+                Contact c= cs.get(memberId);
+                if(c == null){
+                    continue;
+                }
+                String name = c.getDisplayName();
                 if (title == null) {
                     title = name;
                 } else {

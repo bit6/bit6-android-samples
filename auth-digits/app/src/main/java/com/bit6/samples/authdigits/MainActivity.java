@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         Address to = Address.fromParts(Address.KIND_PHONE, phoneNumber);
         if(to != null){
-            bit6.getCallClient().startCall(to, isVideo);
+            bit6.getCallClient().startCall(to, isVideo, null);
         }else{
             Toast.makeText(this, R.string.error_number, Toast.LENGTH_LONG).show();
         }

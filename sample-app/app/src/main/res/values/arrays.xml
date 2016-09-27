@@ -6,4 +6,8 @@
         <item>Development</item>
     </string-array>
 
+    <string-array name="call_mode_array">
+        <item>p2p</item>
+        <item>mix</item>
+    </string-array>
 </resources>

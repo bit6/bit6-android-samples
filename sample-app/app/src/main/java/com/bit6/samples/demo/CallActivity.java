@@ -10,12 +10,14 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import com.bit6.sdk.Address;
 import com.bit6.sdk.Bit6;
+import com.bit6.sdk.CallClient;
 import com.bit6.sdk.RtcDialog;
-import com.bit6.sdk.RtcDialog.StateListener;
 import com.bit6.sdk.ui.RtcMediaView;
 import com.bit6.ui.Contact;
 import com.bit6.ui.InCallView;
@@ -25,16 +27,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class CallActivity extends AppCompatActivity implements StateListener {
+public class CallActivity extends AppCompatActivity implements CallClient.StateListener, View.OnClickListener {
 
     private static final int
             REQ_PERMISSION_WEBRTC = 100;
 
     private Bit6 bit6;
     private MyContactSource cs;
-    private InCallView inCallView;
     private boolean useVideo;
     private ImageButton addParticipantButton;
+    private boolean iconsVisible = true, isConnected;
 
     // Receiver which will handle incoming call notifications
     // only when there are existing ongoing calls
@@ -49,9 +51,21 @@ public class CallActivity extends AppCompatActivity implements StateListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        int flags = WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+
+        getWindow().setFlags(flags, flags);
+
         setContentView(R.layout.activity_call);
 
+        InCallView inCallView = (InCallView) findViewById(R.id.incall_view);
+        inCallView.setOnClickListener(this);
+
         bit6 = Bit6.getInstance();
+        CallClient callClient = bit6.getCallClient();
         // App-specific ContactSource
         cs = ((App) getApplication()).getContactSource();
 
@@ -78,17 +92,34 @@ public class CallActivity extends AppCompatActivity implements StateListener {
             // Have all the permissions - initialize InCallView
             initInCallView();
         }
+
+        if (callClient != null) {
+            callClient.addStateListener(this);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.incall_view) {
+            iconsVisible = !iconsVisible;
+        }
+
+        if (!isConnected) {
+            return;
+        }
+        if (iconsVisible) {
+            addParticipantButton.setVisibility(View.VISIBLE);
+        } else {
+            addParticipantButton.setVisibility(View.GONE);
+        }
+
     }
 
     private void initInCallView() {
         // InCallView UI
-        inCallView = (InCallView) findViewById(R.id.incall_view);
+        InCallView inCallView = (InCallView) findViewById(R.id.incall_view);
         // Initiate inCallView before using it
-        inCallView.init(this, cs);
-
-        // Get RtcDialog from intent and add it to the UI
-        RtcDialog d = bit6.getCallClient().getDialogFromIntent(getIntent());
-        addCall(d);
+        inCallView.init(cs);
     }
 
     @Override
@@ -111,19 +142,22 @@ public class CallActivity extends AppCompatActivity implements StateListener {
 
 
     @Override
-    public void onStateChanged(RtcDialog d, int state) {
+    public void onStateChanged(RtcDialog d) {
         // A call answered
-        if (state == RtcDialog.ANSWER) {
+        if (d.getState() == RtcDialog.ANSWER) {
             useVideo = d.hasVideo();
+            isConnected = true;
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    addParticipantButton.setVisibility(View.VISIBLE);
+                    if (iconsVisible) {
+                        addParticipantButton.setVisibility(View.VISIBLE);
+                    }
                 }
             });
         }
         // A call finished
-        else if (state == RtcDialog.END) {
+        else if (d.getState() == RtcDialog.END || d.getState() == RtcDialog.MISSED) {
             // Was this the last ongoing call?
             if (bit6.getCallClient().getRtcDialogs().size() == 0) {
                 // Yes, end this activity
@@ -138,14 +172,6 @@ public class CallActivity extends AppCompatActivity implements StateListener {
         IncomingCallReceiver.setAlreadyInCall(false);
         unregisterReceiver(receiver);
         super.onDestroy();
-    }
-
-    // Add a new call to the UI
-    void addCall(RtcDialog d) {
-        d.addStateListener(this);
-        if (inCallView != null) {
-            inCallView.addCall(d);
-        }
     }
 
     // Show a list of contacts that is used to add a participant to the call
@@ -166,7 +192,7 @@ public class CallActivity extends AppCompatActivity implements StateListener {
         // Keep only contacts that are not participating in the call
         for (Contact c : data) {
             String id = c.getId();
-            if (!participants.containsKey(id)) {
+            if (!participants.containsKey(id) && !c.getId().startsWith("grp:")) {
                 contacts.add(c);
             }
         }
@@ -187,9 +213,7 @@ public class CallActivity extends AppCompatActivity implements StateListener {
                         // Contact we are calling to
                         Contact c = contacts.get(idx);
                         // Start an outgoing call
-                        RtcDialog d = bit6.getCallClient().startCall(Address.parse(c.getId()), useVideo);
-                        // Add to UI
-                        addCall(d);
+                        bit6.getCallClient().startCall(Address.parse(c.getId()), useVideo, RtcDialog.MODE_P2P);
                     }
                 });
 
@@ -215,8 +239,7 @@ public class CallActivity extends AppCompatActivity implements StateListener {
                 .setPositiveButton(R.string.incoming_call_answer, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Add to UI
-                        addCall(d);
+                        d.answer(useVideo);
                     }
                 })
                 .setNegativeButton(R.string.incoming_call_reject, new DialogInterface.OnClickListener() {

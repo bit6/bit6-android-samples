@@ -85,6 +85,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         Address to = Address.fromParts(Address.KIND_USERNAME, other);
-        RtcDialog d = bit6.getCallClient().startCall(to, isVideo);
+        RtcDialog d = bit6.getCallClient().startCall(to, isVideo, null);
     }
 }

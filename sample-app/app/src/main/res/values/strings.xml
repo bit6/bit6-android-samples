@@ -7,6 +7,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="logout">Logout</string>
+    <string name="settings">Settings</string>
     <string name="answer_call">Answer</string>
     <string name="reject_call">Reject</string>
 
@@ -42,6 +43,10 @@
 
     <!-- CallActivity - In-call UI -->
     <string name="call_add_participant_dialog_title">Select Contact</string>
+    <string name="incoming_call_text">%1$s is calling …</string>
+    <string name="incoming_call">Incoming call </string>
+    <string name="incoming_call_answer">Answer</string>
+    <string name="incoming_call_reject">Reject</string>
 
     <!-- GroupActivity -->
     <string name="group_menu_edit_title">Edit Title</string>
@@ -52,5 +57,17 @@
     <!-- Error messages -->
     <string name="error_invalid_phone_number">Invalid phone number</string>
     <string name="error_incorrect_credentials">Incorrect username/password</string>
+
+    <!--settings-->
+    <string name="dev">Development</string>
+    <string name="prod">Production</string>
+    <string name="media_mode">Media Mode</string>
+    <string name="environment">Environment</string>
+    <string name="api_key">API key</string>
+    <string name="websocket">Websocket</string>
+    <string name="connected">connected</string>
+    <string name="disconnected">disconnected</string>
+    <string name="my_identity">Own identity</string>
+    <string name="display_name">Display name</string>
 
 </resources>

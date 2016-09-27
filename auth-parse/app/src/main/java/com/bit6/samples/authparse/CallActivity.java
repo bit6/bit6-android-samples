@@ -5,15 +5,14 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import com.bit6.sdk.Bit6;
+import com.bit6.sdk.CallClient;
 import com.bit6.sdk.RtcDialog;
-import com.bit6.sdk.RtcDialog.StateListener;
 import com.bit6.sdk.ui.RtcMediaView;
 import com.bit6.ui.InCallView;
 
-public class CallActivity extends Activity implements StateListener {
+public class CallActivity extends Activity implements CallClient.StateListener {
 
-    private Bit6 bit6;
-    private InCallView inCallView;
+    private CallClient callClient;
     private static final int REQ_PERMISSION_WEBRTC = 100;
 
     @Override
@@ -21,7 +20,8 @@ public class CallActivity extends Activity implements StateListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call);
 
-        bit6 = Bit6.getInstance();
+        callClient = Bit6.getInstance().getCallClient();
+        callClient.addStateListener(this);
 
         // This is mostly for SDK 23
         // Check if the user has granted sufficient permissions for WebRTC calling
@@ -36,30 +36,20 @@ public class CallActivity extends Activity implements StateListener {
 
     private void initInCallView() {
         // InCallView UI
-        inCallView = (InCallView) findViewById(R.id.incall_view);
+        InCallView inCallView = (InCallView) findViewById(R.id.incall_view);
         // Initiate inCallView before using it
-        inCallView.init(this, null);
-
-        // Get RtcDialog from intent and add it to the UI
-        RtcDialog d = bit6.getCallClient().getDialogFromIntent(getIntent());
-        addCall(d);
+        inCallView.init(null);
     }
 
     @Override
-    public void onStateChanged(RtcDialog d, int state) {
-        if (state == RtcDialog.END) {
+    public void onStateChanged(RtcDialog d) {
+        if (d.getState() == RtcDialog.END) {
             // Was this the last ongoing call?
-            if (bit6.getCallClient().getRtcDialogs().size() == 0) {
+            if (callClient.getRtcDialogs().size() == 0) {
                 // Yes, end this activity
                 finish();
             }
         }
-    }
-
-    // Add a new call to the UI
-    void addCall(RtcDialog d) {
-        d.addStateListener(this);
-        inCallView.addCall(d);
     }
 
     @Override

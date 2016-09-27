@@ -21,8 +21,6 @@ import org.json.JSONArray;
 public class MainActivity extends AppCompatActivity {
 
     private Bit6 bit6;
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
     private FriendsAdapter adapter;
 
     protected static JSONArray friends = new JSONArray();
@@ -41,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             openLoginScreen();
         }
-        mLayoutManager = new LinearLayoutManager(this);
-        recyclerView = (RecyclerView) findViewById(R.id.list);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setHasFixedSize(true);
 
@@ -104,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void openLoginScreen(){
+    private void openLoginScreen() {
         Intent i = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(i);
         finish();
