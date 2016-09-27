@@ -34,15 +34,15 @@ import org.json.JSONObject;
 public class ChatsActivity extends AppCompatActivity {
 
     private Bit6 bit6;
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chats);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         bit6 = Bit6.getInstance();
@@ -71,6 +71,9 @@ public class ChatsActivity extends AppCompatActivity {
                 break;
             case R.id.menu_create_group:
                 showCreateGroupDialog();
+                break;
+            case R.id.menu_settings:
+                startActivity(new Intent(ChatsActivity.this, SettingsActivity.class));
                 break;
             case R.id.menu_logout:
                 bit6.getSessionClient().logout();

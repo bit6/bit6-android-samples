@@ -90,7 +90,7 @@ public class FriendsAdapter extends
         public void onClick(View v) {
             Bit6 bit6 = Bit6.getInstance();
             Address to = Address.fromParts("fb", userId);
-            bit6.getCallClient().startCall(to, isVideo);
+            bit6.getCallClient().startCall(to, isVideo, null);
         }
     }
 

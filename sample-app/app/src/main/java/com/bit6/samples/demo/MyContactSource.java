@@ -2,7 +2,6 @@ package com.bit6.samples.demo;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 
 import com.bit6.sdk.db.Contract;
 import com.bit6.ui.Contact;
@@ -82,11 +81,6 @@ public class MyContactSource implements ContactSource {
 
         @Override
         public String getAvatarUri() {
-            return null;
-        }
-
-        @Override
-        public Bitmap getAvatarBitmap() {
             return null;
         }
     }

@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    compileSdkVersion 24
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.bit6.samples.authparse"
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
     }
@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    compile 'com.parse.bolts:bolts-android:1.+'
+    compile 'com.parse.bolts:bolts-android:1.4.0'
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
-    compile "com.bit6.ui:bit6-ui:0.9.7"
+    compile "com.bit6.ui:bit6-ui:0.9.8"
 }

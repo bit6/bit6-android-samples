@@ -1,4 +1,3 @@
-
 package com.bit6.samples.demo;
 
 import android.app.Activity;
@@ -15,17 +14,38 @@ import android.widget.Toast;
 import com.bit6.sdk.Address;
 import com.bit6.sdk.Bit6;
 import com.bit6.sdk.ResultHandler;
+import com.bit6.sdk.SessionClient;
 
 public class MainActivity extends Activity implements OnClickListener {
 
     static final String TAG = "Main";
 
     private Bit6 bit6;
-
     private EditText mUsername;
     private EditText mPassword;
     private Button mLogin;
     private Button mSignup;
+
+    // Handle the authentication result (from login or signup calls)
+    private ResultHandler mAuthResultHandler = new ResultHandler() {
+
+        @Override
+        public void onResult(boolean success, String msg) {
+            mLogin.setEnabled(true);
+            mSignup.setEnabled(true);
+            if (success) {
+                if (doneIfAuthenticated()) {
+                    // Do not show anything in the toast
+                    msg = null;
+                }
+            } else {
+                Log.e(TAG, "Auth failed: " + msg);
+            }
+            if (msg != null) {
+                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,36 +77,22 @@ public class MainActivity extends Activity implements OnClickListener {
     // If user is authenticated - go to ChatsActivity
     private boolean doneIfAuthenticated() {
         // Is the user authenticated?
-        boolean flag = bit6.getSessionClient().isAuthenticated();
+        SessionClient sessionClient = bit6.getSessionClient();
+        boolean flag = sessionClient.isAuthenticated();
         if (flag) {
             // Go the Chats activity
+            Address address = sessionClient.getOwnIdentity();
+            String displayName = address.getValue();
+            if (displayName != null) {
+                displayName = displayName.substring(0, 1).toUpperCase() + displayName.substring(1);
+            }
+            bit6.getSessionClient().setDisplayName(displayName);
             Intent intent = new Intent(MainActivity.this, ChatsActivity.class);
             startActivity(intent);
             finish();
         }
         return flag;
     }
-
-    // Handle the authentication result (from login or signup calls)
-    private ResultHandler mAuthResultHandler = new ResultHandler() {
-
-        @Override
-        public void onResult(boolean success, String msg) {
-            mLogin.setEnabled(true);
-            mSignup.setEnabled(true);
-            if (success) {
-                if (doneIfAuthenticated()) {
-                    // Do not show anything in the toast
-                    msg = null;
-                }
-            } else {
-                Log.e(TAG, "Auth failed: " + msg);
-            }
-            if (msg != null) {
-                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
-            }
-        }
-    };
 
     @Override
     public void onClick(View v) {
@@ -118,5 +124,4 @@ public class MainActivity extends Activity implements OnClickListener {
             bit6.getSessionClient().login(identity, pass, mAuthResultHandler);
         }
     }
-
 }
