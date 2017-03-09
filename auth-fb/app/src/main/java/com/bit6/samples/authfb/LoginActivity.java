@@ -14,7 +14,6 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
@@ -61,9 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
         bit6 = Bit6.getInstance();
-
         progress = (ProgressBar)findViewById(R.id.progress);
 
         Button login = (Button) findViewById(R.id.fb_login);
@@ -112,7 +109,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }

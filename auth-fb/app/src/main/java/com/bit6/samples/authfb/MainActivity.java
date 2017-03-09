@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        FacebookSdk.setApplicationId(getString(R.string.fb_app_id));
         FacebookSdk.sdkInitialize(getApplicationContext());
         bit6 = Bit6.getInstance();
         SessionClient sessionClient = bit6.getSessionClient();
@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_logout) {
-            FacebookSdk.sdkInitialize(getApplicationContext());
             LoginManager.getInstance().logOut();
             if (AccessToken.getCurrentAccessToken() != null) {
                 AccessToken.setCurrentAccessToken(null);

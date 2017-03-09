@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "23.0.3"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "com.bit6.samples.authdigits"
@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    compile "com.bit6.ui:bit6-ui:0.9.8"
+    compile 'com.bit6.ui:bit6-ui:0.10.0'
     compile('com.digits.sdk.android:digits:1.9.4@aar') {
         transitive = true;
     }

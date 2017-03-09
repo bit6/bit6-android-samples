@@ -12,8 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
-
 import com.bit6.sdk.Address;
 import com.bit6.sdk.Bit6;
 import com.bit6.sdk.CallClient;
@@ -60,9 +58,6 @@ public class CallActivity extends AppCompatActivity implements CallClient.StateL
         getWindow().setFlags(flags, flags);
 
         setContentView(R.layout.activity_call);
-
-        InCallView inCallView = (InCallView) findViewById(R.id.incall_view);
-        inCallView.setOnClickListener(this);
 
         bit6 = Bit6.getInstance();
         CallClient callClient = bit6.getCallClient();
@@ -120,6 +115,7 @@ public class CallActivity extends AppCompatActivity implements CallClient.StateL
         InCallView inCallView = (InCallView) findViewById(R.id.incall_view);
         // Initiate inCallView before using it
         inCallView.init(cs);
+        inCallView.setOnClickListener(this);
     }
 
     @Override

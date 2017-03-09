@@ -52,6 +52,7 @@ public class ChatActivity extends AppCompatActivity implements NotificationClien
         setSupportActionBar(toolbar);
 
         conversationView = (ConversationView) findViewById(R.id.conversation);
+//        conversationView.setFilter(Contract.Messages.TYPE_MASK, Contract.Messages.IS, Contract.Messages.TYPE_CALL);
         composeView = conversationView.getComposeView();
         // Bit6 instance
         bit6 = Bit6.getInstance();
